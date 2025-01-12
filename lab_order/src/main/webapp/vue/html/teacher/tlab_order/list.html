@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>教师讲座预约</title>
+<meta name="description" content="Dashmix - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+<meta name="author" content="pixelcave">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Dashmix - Bootstrap 4 Admin Template &amp; UI Framework">
+<meta property="og:site_name" content="Dashmix">
+<meta property="og:description" content="Dashmix - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+<meta property="og:type" content="website">
+<meta property="og:url" content="">
+<meta property="og:image" content="">
+
+<link rel="stylesheet" href="../../../static//admin/css/css2.css">
+<link rel="stylesheet" id="css-main" href="../../../static//admin/css/dashmix.min.css">
+<link rel="stylesheet" type="text/css" href="../../../static/page/myPagination.css" />
+
+<style>
+.bodyClass::-webkit-scrollbar {
+display: none; /* Chrome Safari */
+}
+.bodyClass {
+scrollbar-width: none; /* firefox */
+-ms-overflow-style: none; /* IE 10+ */
+overflow-x: hidden;
+overflow-y: auto;
+}
+
+.btnStyle{
+margin-left:4px;
+margin-top:6px
+}
+</style>
+</head>
+<body class="bodyClass">
+
+<div id="app">
+	<div id="page-container" class="sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-narrow">
+		<main id="main-container">
+			<div class="modal" id="modal-block-vcenter" tabindex="-1" role="dialog" aria-labelledby="modal-block-vcenter" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="block block-themed block-transparent mb-0">
+							<div class="block-header bg-primary-dark">
+								<h3 class="block-title" id="block-title">二维码</h3>
+								<div class="block-options">
+									<button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+										<i class="fa fa-fw fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<div class="block-content" id="block-content">
+							</div>
+							<div class="block-content block-content-full text-right bg-light">
+								<button type="button" class="btn btn-sm btn-light" data-dismiss="modal">关闭</button>
+								<!-- <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Done</button> -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content">
+				<div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-left">
+					<div>
+						<h1 class="h2 mb-1">
+							教师讲座预约
+						</h1>
+					</div>
+				</div>
+			</div>
+			<div class="content">
+				<div class="col-lg-12">
+					<div  class="listContent">
+						<div class="form-group form-row">
+							<div class="col-2">
+								<label>教师工号</label>
+								<input type="text" class="form-control"  value="" placeholder="请输入教师工号" id="teacherNo" >
+							</div>
+							<div class="col-2">
+								<label>教师名</label>
+								<input type="text" class="form-control"  value="" placeholder="请输入教师名" id="teacherName" >
+							</div>
+							<div class="col-4">
+								<label>预约日期</label>
+								<div>
+									<div class="form-group form-row">
+										<div class="col-6">
+											<input type="text" class="form-control  Wdate"  readonly="readonly"   value=""  onFocus="WdatePicker({startDate: '%y-%M-%d' ,dateFmt:'yyyy-MM-dd',alwaysUseStartDate: true })"  placeholder="请输入开始日期" id="orderDate1">
+										</div>
+										<div class="col-6">
+											<input type="text" class="form-control  Wdate"  readonly="readonly"   value=""  onFocus="WdatePicker({startDate: '%y-%M-%d' ,dateFmt:'yyyy-MM-dd',alwaysUseStartDate: true })"  placeholder="请输入结束日期" id="orderDate2">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-2">
+								<label>预约状态</label>
+								<select  id="orderStatus"  class="form-control">
+									<option value="">全部</option>
+									<template v-for="item in orderStatusList">
+										<option :value="item.id">{{item.name}}</option>
+									</template>
+								</select>
+							</div>
+							<div class="col-1">
+								<label style="visibility: hidden;display:block">1</label>
+								<button type="button" onclick="ajaxList(1);" class="btn btn-primary">查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row listContent">
+					<div class="col-md-12">
+						<div class="block block-rounded block-mode-loading-refresh">
+							<div class="block-header block-header-default">
+								<h3 class="block-title">
+								</h3>
+							</div>
+							<div class="block-header block-header-default">
+								<div class="col-lg-12">
+									<div class="form-group form-row">
+									</div>
+								</div>
+							</div>
+							<div class="block-content">
+								<table class="table table-striped table-hover table-borderless table-vcenter font-size-sm"  style="width:100%; table-layout:inherit; word-break: break-all;overflow: auto;">
+									<thead>
+										<tr class="text-uppercase">
+											<th>教师工号</th>
+											<th>教师名</th>
+											<th>学院</th>
+											<th>讲座</th>
+											<th>上课课程</th>
+											<th>预约原因</th>
+											<th>预约日期</th>
+											<th>预约时段</th>
+											<th>创建时间</th>
+											<th>预约状态</th>
+											<th style="width:200px;">操作</th>
+										</tr>
+									</thead>
+									<tbody id="tlab_order_body">
+										<tr v-for="item in dataList">
+											<td>{{item.tlabOrder.teacherNo}}</td>
+											<td>{{item.tlabOrder.teacherName}}</td>
+											<td>{{item.collegeIdStr}}</td>
+											<td>{{item.roomIdStr}}</td>
+											<td>{{item.courseIdStr}}</td>
+											<td>{{item.tlabOrder.orderReason}}</td>
+											<td>{{item.tlabOrder.orderDate}}</td>
+											<td>{{item.orderTimeStr}}</td>
+											<td>{{item.tlabOrder.createTime}}</td>
+											<td>{{item.orderStatusStr}}</td>
+											<td>
+												<a v-if="item.tlabOrder.orderStatus=='1'"  :href="'../../../html/teacher/tlab_order/update_page.html?id='+item.tlabOrder.id+'&roomId='+data.roomId+''" class="btn btn-primary btnStyle">修改</a>
+												<a href="javascript:void(0)" v-if="item.tlabOrder.orderStatus=='1'" onclick="del1(this)" :data-id="item.tlabOrder.id" class="btn btn-danger btnStyle">删除</a>
+												<a href="javascript:void(0)" v-if="item.tlabOrder.orderStatus=='1'" onclick="qxyy(this)" :data-id="item.tlabOrder.id" act-type="1" class="btn btn-warning btnStyle">取消预约</a>
+											</td>
+										</tr>
+										<tr v-if="dataList && dataList.length==0">
+											<td></td><td></td><td></td><td></td><td></td><td>无数据</td><td></td><td></td><td></td><td></td><td></td>
+										</tr>
+									</tbody>
+								</table>
+								<div id="tlab_order_bar" class="pagination" style="margin-top:20px;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" id="detailContent" style="display:none;">
+					<div class="col-md-12">
+						<div class="block block-rounded block-mode-loading-refresh">
+							<div class="block-header block-header-default">
+								<h3 class="block-title">
+									<a href="javascript:void(0)" onclick="goLlist()" class="btn btn-success">返回</a>
+								</h3>
+							</div>
+							<div class="block-content">
+								<table class="table table-striped table-hover table-borderless table-vcenter font-size-sm"  style="width:100%; table-layout:inherit; word-break: break-all;overflow: auto;">
+									<thead>
+									</thead>
+									<tbody id="detailBody">
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+<script type="text/javascript" src="../../../static//common/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../../static/vue.js"></script>
+<script type="text/javascript" src="../../../static/config.js"></script>
+<script type="text/javascript" src="../../../static/page/myPagination.js"></script>
+<script type="text/javascript" src="../../../static/datetime/4.8/skin/WdatePicker.css"></script>
+<script type="text/javascript" src="../../../static/datetime/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../../../static//common/utils/listutils.js?v=8248"></script>
+<script src="../../../static//admin/js/dashmix.app.min.js"></script>
+<script src="../../../static//admin/js/Chart.bundle.min.js"></script>
+<script src="../../../static//admin/js/be_pages_dashboard.min.js"></script>
+<script src="../../../static//admin/utils.js"></script>
+
+<script>
+var  vm=new Vue({
+	el : '#app',
+	data:{
+		loginToken:currentLogin.loginToken,
+		requestUri:uri,
+		loginName:'',
+		roleName:'',
+		loginId:'',
+		loginType:'',
+		user:{
+		},
+		data:{
+			roomId:(httpData['roomId']==undefined?'':httpData['roomId']),
+		},
+		dataList:[],
+		orderStatusList:[],
+	},
+	created(){
+		this.init();
+	},
+	methods:{
+		init(){
+			this.getInitData();
+		},
+		getInitData(){
+			$.ajax({
+				dataType:"json",
+				type:"post",
+				url:uri+"/teacher/tlab_order/getInitData",
+				data:{
+					'roomId': (httpData['roomId']==undefined?'':httpData['roomId']),
+					"loginToken":currentLogin.loginToken
+				},
+				success:function (data) {
+					if(data.code!=undefined&&data.code==0){
+						alert(data.msg);
+						return;
+					}
+					vm.$data.orderStatusList= data.orderStatusList;
+					vm.$nextTick(function () {
+						ajaxList(1);
+					});
+				}
+			})
+		},
+	}
+});
+vm.$data.loginName = currentLogin.loginName;
+vm.$data.roleName = currentLogin.roleName;
+vm.$data.loginId = currentLogin.loginId;
+vm.$data.loginType = currentLogin.loginType;
+var currentPage=1;
+function ajaxList(page) {
+	currentPage=page;
+	var teacherNo = $("#teacherNo").val();
+	var teacherName = $("#teacherName").val();
+	var orderDate1 =$('#orderDate1').val();
+	var orderDate2 =$('#orderDate2').val();
+	var orderDate1 = $("#orderDate1").val();
+	var orderDate2 = $("#orderDate2").val();
+	var orderStatus = $("#orderStatus").val();
+	var countRs = ajaxCount();
+	if(countRs.totalPage<page){
+		page = countRs.totalPage;
+	}
+	showLoading('../../../static//common/loading.gif');
+	$.ajax({
+		type : 'get',
+		url : uri+"/teacher/tlab_order/queryList",
+		data : {
+			"loginToken":currentLogin.loginToken,
+			"roomId":vm.$data.data.roomId,
+			"page":page,
+			"teacherNo":teacherNo,
+			"teacherName":teacherName,
+			"orderDate1":orderDate1,
+			"orderDate2":orderDate2,
+			"orderStatus":orderStatus
+		},
+		success : function(result) {
+			hideLoading();
+			var rows = result.list;//得到数据列
+			var total = countRs.count;//得到数据总数
+			var totalPage=countRs.totalPage;
+			var html = '';
+			vm.$data.dataList = rows;
+			vm.$nextTick(function () {
+				new myPagination({
+					id: 'tlab_order_bar',
+					curPage:page, //初始页码
+					pageTotal:totalPage, //总页数
+					pageAmount: 10,  //每页多少条
+					dataTotal: total, //总共多少条数据
+					pageSize: 10, //可选,分页个数
+					showPageTotalFlag:true, //是否显示数据统计
+					showSkipInputFlag:false, //是否支持跳转
+					getPage: function (page) {
+						ajaxList(page);
+					}
+				})
+				initListFun();
+			})
+		}
+	});
+}
+function ajaxCount() {
+	var rs = null;
+	var teacherNo = $("#teacherNo").val();
+	var teacherName = $("#teacherName").val();
+	var orderDate1 =$('#orderDate1').val();
+	var orderDate2 =$('#orderDate2').val();
+	var orderDate1 = $("#orderDate1").val();
+	var orderDate2 = $("#orderDate2").val();
+	var orderStatus = $("#orderStatus").val();
+	$.ajax({
+		type : 'get',
+		url : uri+"/teacher/tlab_order/queryCount",
+		async: false,
+		data : {
+			"loginToken":currentLogin.loginToken,
+			"roomId":vm.$data.data.roomId,
+			"teacherNo":teacherNo,
+			"teacherName":teacherName,
+			"orderDate1":orderDate1,
+			"orderDate2":orderDate2,
+			"orderStatus":orderStatus
+		},
+		success : function(result) {
+			rs = result;
+		}
+	});
+	return rs;
+}
+function qxyy(e){
+	var r=confirm("确认取消预约该教师讲座预约？");
+	if(r==true){
+		var id = $(e).attr("data-id");
+		$.ajax({
+			type : 'get',
+			url : uri+"/teacher/tlab_order/qxyy",
+			data : {
+				"loginToken":currentLogin.loginToken,
+				"id":id
+			},
+			success : function(result) {
+				alert(result.msg);
+				if(result.code==1){
+					ajaxList(currentPage);
+				}
+			}
+		});
+	}
+}
+function del1(e){
+	if(window.confirm('你确定要删除该教师讲座预约吗')){
+		var id = $(e).attr("data-id");
+		$.ajax({
+			type : 'get',
+			url : uri+"/teacher/tlab_order/del1",
+			data : {
+				"loginToken":currentLogin.loginToken,
+				"id":id
+			},
+			success : function(result) {
+				alert(result.msg);
+				if(result.code==1){
+					ajaxList(currentPage);
+				}
+			}
+		});
+		return true;
+		}else{
+		return false;
+	}
+}
+function downLoadFile(e){
+	var url = $(e).attr("file-url");
+	window.open(url);
+}
+function gotoPage(e){
+	var url = $(e).attr("data-url");
+	window.location.href=url;
+}
+
+</script>
+
+</body>
+</html>
+

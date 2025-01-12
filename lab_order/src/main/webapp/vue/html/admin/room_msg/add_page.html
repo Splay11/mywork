@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>新增-讲座 </title>
+<meta name="description" content="Dashmix - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+<meta name="author" content="pixelcave">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Dashmix - Bootstrap 4 Admin Template &amp; UI Framework">
+<meta property="og:site_name" content="Dashmix">
+<meta property="og:description" content="Dashmix - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+<meta property="og:type" content="website">
+<meta property="og:url" content="">
+<meta property="og:image" content="">
+
+<link rel="stylesheet" href="../../../static/admin/css/css2.css">
+<link rel="stylesheet" id="css-main" href="../../../static/admin/css/dashmix.min.css">
+<link rel="stylesheet" type="text/css" href="../../../static/selectsearch/jquery.searchableSelect.css" />
+
+<style>
+.bodyClass::-webkit-scrollbar {
+display: none; /* Chrome Safari */
+}
+.bodyClass {
+scrollbar-width: none; /* firefox */
+-ms-overflow-style: none; /* IE 10+ */
+overflow-x: hidden;
+overflow-y: auto;
+}
+
+.dz-image>img{
+width:120px;
+height:120px;
+}
+</style>
+</head>
+<body class="bodyClass">
+
+<div id="app">
+	<div id="page-container" class="sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-narrow">
+		<main id="main-container">
+			<div class="content">
+				<div class="block block-rounded">
+					<div class="block-header block-header-default">
+						<h3 class="block-title">新增-讲座 </h3>
+					</div>
+					<div class="block-content block-content-full">
+						<div>
+							<div class="row">
+								<div class="col-lg-8 col-xl-5">
+									<div class="form-group" id="roomNameParentContent">
+										<label>讲座名称<span style="color:red">(*必填)</span></label>
+										<input type="text"  value="" placeholder="请输入讲座名称" id="roomName" class="form-control">
+									</div>
+									<div class="form-group" id="addressParentContent">
+										<label>讲座地点<span style="color:red">(*必填)</span></label>
+										<input type="text"  value="" placeholder="请输入讲座地点" id="address" class="form-control">
+									</div>
+									<div class="form-group" id="manageIdParentContent">
+										<label>负责管理员<span style="color:red">(*必填)</span></label>
+										<select  id="manageId"   >
+											<template v-for="item in manageList">
+												<option :value="item.id">{{item.name}}</option>
+											</template>
+										</select>
+									</div>
+									<div class="form-group" id="maxNumParentContent">
+										<label>可容纳人数<span style="color:red">(*必填)</span></label>
+										<input type="text"  value="" placeholder="请输入可容纳人数(请输入数字)" id="maxNum" class="form-control">
+									</div>
+									<div class="form-group" id="remarkParentContent">
+										<label>备注</label>
+										<input type="text"  value="" placeholder="请输入备注" id="remark" class="form-control">
+									</div>
+									<div class="form-group" id="roomTypeParentContent">
+										<label>讲座类型<span style="color:red">(*必填)</span></label>
+										<select id="roomType"  class="form-control">
+											<template v-for="item in roomTypeList">
+												<option :value="item.id">{{item.name}}</option>
+											</template>
+										</select>
+									</div>
+									<div class="form-group">
+										<button type="button" onclick="submitData();" class="btn btn-primary">提交</button>
+										<button type="button"   onclick="javascript:history.back(-1);" class="btn btn-light">返回</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+<script type="text/javascript" src="../../../static/common/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../../static/vue.js"></script>
+<script type="text/javascript" src="../../../static/config.js"></script>
+<script src="../../../static/admin/js/dashmix.core.min.js"></script>
+<script src="../../../static/admin/js/dashmix.app.min.js"></script>
+<script src="../../../static/admin/js/Chart.bundle.min.js"></script>
+<script src="../../../static/admin/js/be_pages_dashboard.min.js"></script>
+<script type="text/javascript" src="../../../static/selectsearch/jquery.searchableSelect.js"></script>
+<script type="text/javascript" src="../../../static/common/utils/listutils.js?v=7522"></script>
+
+<script>
+var  vm=new Vue({
+	el : '#app',
+	data:{
+		loginToken:currentLogin.loginToken,
+		requestUri:uri,
+		loginName:'',
+		roleName:'',
+		loginId:'',
+		loginType:'',
+		data:{
+		},
+		dataList:[],
+		manageList:[],
+		roomTypeList:[],
+	},
+	created(){
+		this.init();
+	},
+	methods:{
+		init(){
+			this.getInitData();
+		},
+		getInitData(){
+			$.ajax({
+				dataType:"json",
+				type:"post",
+				url:uri+"/admin/room_msg/add",
+				data:{
+					"loginToken":currentLogin.loginToken
+				},
+				success:function (data) {
+					if(data.code!=undefined&&data.code==0){
+						alert(data.msg);
+						return;
+					}
+					vm.$data.manageList= data.manageList;
+					vm.$data.roomTypeList= data.roomTypeList;
+					vm.$data.data= data.data;
+					vm.$nextTick(function () {
+						$('#manageId').next().remove();
+						$('#manageId').searchableSelect();
+						$(".searchable-select").css("width","100%");
+						$(".searchable-select").css("height","35px");
+						$(".searchable-select-holder").css("min-height","20px");
+						$(".searchable-select-holder").css("height","35px");
+						$(".searchable-select").css("min-width","40px");
+					})
+				}
+			})
+		},
+	}
+});
+vm.$data.loginName = currentLogin.loginName;
+vm.$data.roleName = currentLogin.roleName;
+vm.$data.loginId = currentLogin.loginId;
+vm.$data.loginType = currentLogin.loginType;
+function submitData(){
+	var roomName= $('#roomName').val();
+	var address= $('#address').val();
+	var manageId=$('#manageId').val()
+	var manageId= $('#manageId').val();
+	var maxNum= $('#maxNum').val();
+	var remark= $('#remark').val();
+	var roomType= $('#roomType').val();
+	if(maxNum!=''){
+		if(isIntNum(maxNum)==false){
+			alert("可容纳人数必须填入整数");
+			return;
+		}
+	}
+	$.ajax({
+		type: 'post',
+		url: uri+'/admin/room_msg/add_submit',
+		data:{
+			"loginToken":currentLogin.loginToken,
+			"roomName":roomName,
+			"address":address,
+			"manageId":manageId,
+			"maxNum":maxNum,
+			"remark":remark,
+			"roomType":roomType
+		},
+		success: function(result) {
+			if(result.code == 0){
+				alert(result.msg);
+				}else{
+				alert(result.msg);
+				window.location.href="../../../html/admin/room_msg/list.html";
+			}
+		}
+	});
+}
+
+</script>
+
+</body>
+</html>
+
